@@ -1,0 +1,13 @@
+{
+  "name": "zafarjonovich/application-filler",
+  "description": "Image application filler",
+  "type": "package",
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "zafarjonovich\\ApplicationFiller\\": "src"
+    }
+  }
+}
