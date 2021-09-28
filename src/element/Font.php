@@ -10,17 +10,16 @@ class Font
 {
     private $name;
 
-    private $size;
+    private $path;
 
-    public function __construct($name,$size)
+    public function __construct($path,$size)
     {
-        $this->name = $name;
+        
+        if(!file_exists($path) || substr($path,-3) !== 'ttf')
+            throw new \Exception('Font file doesn\'t exists or not found');
+        
+        $this->path = $path;
         $this->size = $size;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function getSize()
@@ -30,6 +29,6 @@ class Font
 
     public function getPath()
     {
-        return ApplicationFiller::MAIN_DIR.'/font/'.$this->getName().'.ttf';
+        return $this->path;
     }
 }

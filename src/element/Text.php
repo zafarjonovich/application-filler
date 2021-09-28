@@ -30,7 +30,7 @@ class Text
     public function getGDFont()
     {
         $font = new GDFont($this->text);
-        $font->size($this->getSize());
+        $font->size($this->font->getSize());
         $font->file($this->getFont()->getPath());
         $font->valign('top');
         $font->align('left');
@@ -38,14 +38,38 @@ class Text
         return $font;
     }
 
-    public function initLineText(Line $line,GDFont $font,array $lineParts)
+    public static function initLineText(Line $lineText,Text $text,GDFont $gdFont,array $lineParts)
     {
-        if($this->alignmentIs(self::ALIGNMENT_MODE_LEFT)) {
-            $this->font = implode(self::TEXT_SEPARATOR,$lineParts);
-        } else if($this->alignmentIs(self::ALIGNMENT_MODE_CENTER)) {
-            $this->font = implode(self::TEXT_SEPARATOR,$lineParts);
-        } else if($this->alignmentIs(self::ALIGNMENT_MODE_RIGHT)) {
-            $this->font = implode(self::TEXT_SEPARATOR,$lineParts);
+        if($text->alignmentIs(self::ALIGNMENT_MODE_LEFT)) {
+            $gdFont->text = implode(self::TEXT_SEPARATOR,$lineParts);
+        } else if($text->alignmentIs(self::ALIGNMENT_MODE_CENTER)) {
+            $gdFont->text = ' ';
+
+            $charWidth = $gdFont->getBoxSize()['width'];
+
+            $text = implode(self::TEXT_SEPARATOR,$lineParts);
+
+            $gdFont->text = $text;
+
+            $freeWidth = $lineText->length() - $gdFont->getBoxSize()['width'];
+
+            $count = round($freeWidth / $charWidth / 2);
+
+            $gdFont->text = str_repeat(' ',$count).$text;
+        } else if($text->alignmentIs(self::ALIGNMENT_MODE_RIGHT)) {
+            $gdFont->text = ' ';
+
+            $charWidth = $gdFont->getBoxSize()['width'];
+
+            $text = implode(self::TEXT_SEPARATOR,$lineParts);
+
+            $gdFont->text = $text;
+
+            $freeWidth = $lineText->length() - $gdFont->getBoxSize()['width'];
+
+            $count = round($freeWidth / $charWidth);
+
+            $gdFont->text = str_repeat(' ',$count).$text;
         }
     }
 
@@ -63,11 +87,6 @@ class Text
     public function alignmentIs($alignment)
     {
         return $this->getAlignment() == $alignment;
-    }
-
-    public function getSize()
-    {
-        return $this->size;
     }
 
     public function getFont()

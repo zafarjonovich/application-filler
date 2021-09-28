@@ -40,14 +40,14 @@ class GroupTextAdder
 
         foreach ($parts as $part) {
 
+
             /**
              * @var Line $line
              */
             $line = $group->lines->current();
 
-
-            $font = $this->getGDFont($group->text()->getFont());
-            $tempFont = $this->getGDFont($group->text()->getFont());
+            $font = $group->text()->getGDFont();
+            $tempFont = $group->text()->getGDFont();
 
             $lineTempText = implode(CorrectedLines::TEXT_SEPARATOR,array_merge($lineParts,[$part]));
 
@@ -59,7 +59,7 @@ class GroupTextAdder
 
             if($textWidth > $line->length()) {
 
-                $font->text = implode(Text::TEXT_SEPARATOR,$lineParts);
+                Text::initLineText($line,$group->text(),$font,$lineParts);
 
                 $this->addLine($line,$font);
 
@@ -74,7 +74,7 @@ class GroupTextAdder
 
 
         if(!empty($lineParts)) {
-            $font->text = implode(Text::TEXT_SEPARATOR,$lineParts);
+            Text::initLineText($line,$group->text(),$font,$lineParts);
             $this->addLine($group->lines->current(),$font);
         }
     }
@@ -100,16 +100,5 @@ class GroupTextAdder
                 $font
             )
         );
-    }
-
-    private function getGDFont(Font $textFont)
-    {
-        $font = new GDFont('');
-        $font->size($textFont->getSize());
-        $font->file($textFont->getPath());
-        $font->valign('top');
-        $font->align('left');
-
-        return $font;
     }
 }
