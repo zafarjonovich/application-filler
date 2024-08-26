@@ -32,6 +32,10 @@ class Text
         $font = new GDFont($this->text);
         $font->size($this->font->getSize());
         $font->file($this->getFont()->getPath());
+        $color = $this->font->getColor();
+        if($color) {
+            $font->color($color);
+        }
         $font->valign('top');
         $font->align('left');
 

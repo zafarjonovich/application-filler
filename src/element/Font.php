@@ -12,7 +12,9 @@ class Font
 
     private $path;
 
-    public function __construct($path,$size)
+    private $color;
+
+    public function __construct($path, $size, $attributes = [])
     {
         
         if(!file_exists($path) || substr($path,-3) !== 'ttf')
@@ -20,6 +22,9 @@ class Font
         
         $this->path = $path;
         $this->size = $size;
+        if(isset($attributes['color'])) {
+            $this->color = $attributes['color'];
+        }
     }
 
     public function getSize()
@@ -30,5 +35,16 @@ class Font
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    public function setColor($color)
+    {
+        $this->color = $color;
+        return $this;
     }
 }
